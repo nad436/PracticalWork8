@@ -92,19 +92,22 @@ int main() {
         }
 
         int cmd_count = 0;
-        char *token = strtok(line, "|");
+        char *saveptr1 = NULL;
+        char *saveptr2 = NULL;
+
+        char *token = strtok_r(line, "|", &saveptr1);
         while (token != NULL && cmd_count < MAX_COMMANDS) {
             commands[cmd_count++] = token;
-            token = strtok(NULL, "|");
+            token = strtok_r(NULL, "|", &saveptr1);
         }
 
         int valid_pipeline = 1;
         for (int i = 0; i < cmd_count; i++) {
             int arg_count = 0;
-            char *arg = strtok(commands[i], " \t");
+            char *arg = strtok_r(commands[i], " \t", &saveptr2);
             while (arg != NULL && arg_count < MAX_ARGS - 1) {
                 args_list[i][arg_count++] = arg;
-                arg = strtok(NULL, " \t");
+                arg = strtok_r(NULL, " \t", &saveptr2);
             }
             args_list[i][arg_count] = NULL;
 
